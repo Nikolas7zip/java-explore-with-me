@@ -3,7 +3,7 @@ server:
 
 ewm:
   main-app: ewm-main-service
-  stats-server: http://localhost:9090
+  stats-server: ${EWM_STATS_SERVER_URL}
 
 spring:
   sql:
@@ -13,12 +13,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL10Dialect
-        show_sql: true
+#        show_sql: true
         format_sql: true
     hibernate:
       ddl-auto: none
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ewm
-    username: test
-    password: test
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
