@@ -20,5 +20,4 @@ public class NewCompilationDto {
 
     @NotBlank
     private String title;
-
 }

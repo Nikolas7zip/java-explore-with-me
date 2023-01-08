@@ -9,7 +9,6 @@ import ru.practicum.ewm.dto.GetStatsRequest;
 import ru.practicum.ewm.dto.ViewCount;
 import ru.practicum.ewm.dto.ViewStats;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -22,7 +21,6 @@ public class StatsServiceImpl implements StatsService {
     public StatsServiceImpl(StatsRepository statsRepository) {
         this.statsRepository = statsRepository;
     }
-
 
     @Transactional
     @Override
@@ -44,7 +42,6 @@ public class StatsServiceImpl implements StatsService {
         } else {
             counts = statsRepository.countRangeViews(request.getStart(), request.getEnd());
         }
-
 
         return StatsMapper.mapToViewStats(request.getApp(), counts);
     }
