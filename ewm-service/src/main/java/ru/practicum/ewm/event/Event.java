@@ -24,7 +24,7 @@ public class Event {
     private String annotation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     @Column(name = "confirmed_requests", nullable = false)
@@ -40,11 +40,11 @@ public class Event {
     private LocalDateTime eventDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="initiator_id", referencedColumnName = "id", updatable = false)
+    @JoinColumn(name = "initiator_id", referencedColumnName = "id", updatable = false)
     private User initiator;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", referencedColumnName="id")
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
     @Column(name = "paid", nullable = false)

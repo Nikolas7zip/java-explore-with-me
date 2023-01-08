@@ -21,11 +21,11 @@ public class GetEventsAdminRequest {
     private LocalDateTime rangeStart;
     private LocalDateTime rangeEnd;
 
-    public GetEventsAdminRequest (Set<Long> users,
-                                  Set<EventState> states,
-                                  Set<Long> categories,
-                                  String rangeStart,
-                                  String rangeEnd) {
+    public GetEventsAdminRequest(Set<Long> users,
+                                 Set<EventState> states,
+                                 Set<Long> categories,
+                                 String rangeStart,
+                                 String rangeEnd) {
         this.users = users;
         this.states = states;
         this.categories = categories;
