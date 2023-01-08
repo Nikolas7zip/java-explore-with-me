@@ -28,4 +28,6 @@ public interface EventService {
     EventFullDto cancelByAdmin(Long eventId);
 
     EventFullDto updateByAdmin(Long eventId, AdminUpdateEventDto updateEventDto);
+
+    void incrementViews(Long eventId);
 }

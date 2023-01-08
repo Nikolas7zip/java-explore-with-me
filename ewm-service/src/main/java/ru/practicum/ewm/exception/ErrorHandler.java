@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,6 +45,19 @@ public class ErrorHandler {
                 HttpStatus.BAD_REQUEST.name()
         );
         log.warn("BadRequestException: {}", ex.getMessage());
+
+        return error;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleMissingRequestParameter(final MissingServletRequestParameterException ex) {
+        ApiError error = new ApiError(
+                ex.getMessage(),
+                "Missing request parameter.",
+                HttpStatus.BAD_REQUEST.name()
+        );
+        log.warn("MissingServletRequestParameterException: {}", ex.getMessage());
 
         return error;
     }

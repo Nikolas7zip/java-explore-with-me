@@ -12,7 +12,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 public class GetEventsPublicRequest {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private String text;
     private Set<Long> categories;

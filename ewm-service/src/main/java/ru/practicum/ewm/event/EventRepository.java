@@ -31,5 +31,9 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
     @Query("UPDATE Event ev SET ev.confirmedRequests = ?2 WHERE ev.id = ?1")
     int setConfirmedRequests(Long eventId, Integer confirmedRequests);
 
+    @Modifying
+    @Query("UPDATE Event ev SET ev.views = ev.views + 1 WHERE ev.id = ?1")
+    int incrementViews(Long eventId);
+
     long countByCategory_Id(Long categoryId);
 }

@@ -242,6 +242,12 @@ public class EventServiceImpl implements EventService {
         return EventMapper.mapToFullEventDto(event);
     }
 
+    @Transactional
+    @Override
+    public void incrementViews(Long eventId) {
+        eventRepository.incrementViews(eventId);
+    }
+
     private Event findEventByInitiator(Long userId, Long eventId) {
         Event event = eventRepository.findEventById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException(Event.class, eventId));

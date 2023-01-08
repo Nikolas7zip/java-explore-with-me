@@ -1,9 +1,5 @@
 server:
-  port: 8080
-
-ewm:
-  main-app: ewm-main-service
-  stats-server: http://localhost:9090
+  port: 9090
 
 spring:
   sql:
@@ -19,6 +15,8 @@ spring:
       ddl-auto: none
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:ewm
+    url: jdbc:h2:mem:stats
     username: test
     password: test
+ewm:
+  main-app: ewm-main-service
