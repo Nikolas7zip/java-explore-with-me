@@ -2,8 +2,8 @@ package ru.practicum.ewm.user;
 
 import ru.practicum.ewm.user.dto.UserDto;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserMapper {
     public static User mapToNewUser(UserDto dto) {
@@ -24,11 +24,8 @@ public class UserMapper {
     }
 
     public static List<UserDto> mapToUserDto(List<User> users) {
-        List<UserDto> dtos = new ArrayList<>();
-        for (User user : users) {
-            dtos.add(mapToUserDto(user));
-        }
-
-        return dtos;
+        return users.stream()
+                .map(UserMapper::mapToUserDto)
+                .collect(Collectors.toList());
     }
 }

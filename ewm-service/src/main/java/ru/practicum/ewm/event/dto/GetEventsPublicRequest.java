@@ -3,17 +3,15 @@ package ru.practicum.ewm.event.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import ru.practicum.ewm.validation.EventDateValidator;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Getter
 @ToString
 @NoArgsConstructor
 public class GetEventsPublicRequest {
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     private String text;
     private Set<Long> categories;
     private Boolean paid;
@@ -31,11 +29,11 @@ public class GetEventsPublicRequest {
         this.categories = categories;
         this.paid = paid;
         if (rangeStart != null) {
-            this.rangeStart = LocalDateTime.parse(rangeStart, FORMATTER);
+            this.rangeStart = LocalDateTime.parse(rangeStart, EventDateValidator.FORMATTER);
         }
 
         if (rangeEnd != null) {
-            this.rangeEnd = LocalDateTime.parse(rangeEnd, FORMATTER);
+            this.rangeEnd = LocalDateTime.parse(rangeEnd, EventDateValidator.FORMATTER);
         }
 
         this.onlyAvailable = onlyAvailable;

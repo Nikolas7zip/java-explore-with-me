@@ -6,8 +6,8 @@ import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.user.User;
 import ru.practicum.ewm.user.dto.UserShortDto;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.practicum.ewm.event.EventState.*;
 
@@ -69,12 +69,9 @@ public class EventMapper {
     }
 
     public static List<EventFullDto> mapToFullEventDto(List<Event> events) {
-        List<EventFullDto> dtos = new ArrayList<>();
-        for (Event event : events) {
-            dtos.add(mapToFullEventDto(event));
-        }
-
-        return dtos;
+        return events.stream()
+                .map(EventMapper::mapToFullEventDto)
+                .collect(Collectors.toList());
     }
 
     public static EventShortDto mapToShortEventDto(Event event) {
@@ -102,12 +99,9 @@ public class EventMapper {
     }
 
     public static List<EventShortDto> mapToShortEventDto(List<Event> events) {
-        List<EventShortDto> dtos = new ArrayList<>();
-        for (Event event : events) {
-            dtos.add(mapToShortEventDto(event));
-        }
-
-        return dtos;
+        return events.stream()
+                .map(EventMapper::mapToShortEventDto)
+                .collect(Collectors.toList());
     }
 
     public static void updateEventFromUserDto(Event event, UserUpdateEventDto dto, Category newCategory) {

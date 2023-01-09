@@ -6,9 +6,9 @@ import ru.practicum.ewm.event.Event;
 import ru.practicum.ewm.event.EventMapper;
 import ru.practicum.ewm.event.dto.EventShortDto;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class CompilationMapper {
     public static Compilation mapToNewCompilation(NewCompilationDto dto, List<Event> events) {
@@ -25,10 +25,10 @@ public class CompilationMapper {
         dto.setId(compilation.getId());
         dto.setTitle(compilation.getTitle());
         dto.setPinned(compilation.getPinned());
-        List<EventShortDto> events = new ArrayList<>();
-        for (Event event : compilation.getEvents()) {
-            events.add(EventMapper.mapToShortEventDto(event));
-        }
+
+        List<EventShortDto> events = compilation.getEvents().stream()
+                .map(EventMapper::mapToShortEventDto)
+                .collect(Collectors.toList());
         dto.setEvents(events);
 
         return dto;
@@ -39,10 +39,10 @@ public class CompilationMapper {
         dto.setId(compilation.getId());
         dto.setTitle(compilation.getTitle());
         dto.setPinned(compilation.getPinned());
-        List<EventShortDto> eventsShort = new ArrayList<>();
-        for (Event event : events) {
-            eventsShort.add(EventMapper.mapToShortEventDto(event));
-        }
+
+        List<EventShortDto> eventsShort = events.stream()
+                .map(EventMapper::mapToShortEventDto)
+                .collect(Collectors.toList());
         dto.setEvents(eventsShort);
 
         return dto;

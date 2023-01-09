@@ -3,8 +3,8 @@ package ru.practicum.ewm.category;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryMapper {
 
@@ -28,11 +28,8 @@ public class CategoryMapper {
     }
 
     public static List<CategoryDto> mapToCategoryDto(List<Category> categories) {
-        List<CategoryDto> dtos = new ArrayList<>();
-        for (Category category : categories) {
-            dtos.add(mapToCategoryDto(category));
-        }
-
-        return dtos;
+        return categories.stream()
+                .map(CategoryMapper::mapToCategoryDto)
+                .collect(Collectors.toList());
     }
 }

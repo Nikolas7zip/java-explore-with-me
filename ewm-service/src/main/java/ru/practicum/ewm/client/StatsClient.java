@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.ewm.event.dto.GetEventsPublicRequest;
+import ru.practicum.ewm.validation.EventDateValidator;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ public class StatsClient extends BaseClient {
     }
 
     public void saveEndpointHit(String ipAddress, String uri) {
-        String timestamp = LocalDateTime.now().format(GetEventsPublicRequest.FORMATTER);
+        String timestamp = LocalDateTime.now().format(EventDateValidator.FORMATTER);
         EndpointHitDto dto = new EndpointHitDto(ewmApp, ipAddress, uri, timestamp);
         ResponseEntity<Object> response = post("/hit", dto);
         if (!response.getStatusCode().is2xxSuccessful()) {

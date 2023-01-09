@@ -3,8 +3,8 @@ package ru.practicum.ewm.participation;
 import ru.practicum.ewm.event.Event;
 import ru.practicum.ewm.participation.dto.ParticipationRequestDto;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.practicum.ewm.participation.ParticipationStatus.*;
 
@@ -35,11 +35,8 @@ public class ParticipationRequestMapper {
     }
 
     public static List<ParticipationRequestDto> mapToParticipationRequestDto(List<ParticipationRequest> participations) {
-        List<ParticipationRequestDto> dtos = new ArrayList<>();
-        for (ParticipationRequest participation : participations) {
-            dtos.add(mapToParticipationRequestDto(participation));
-        }
-
-        return dtos;
+        return participations.stream()
+                .map(ParticipationRequestMapper::mapToParticipationRequestDto)
+                .collect(Collectors.toList());
     }
 }
