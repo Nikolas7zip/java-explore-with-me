@@ -23,7 +23,7 @@ public class Compilation {
     @Column(name = "pinned", nullable = false)
     private Boolean pinned;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", length = 128, nullable = false)
     private String title;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

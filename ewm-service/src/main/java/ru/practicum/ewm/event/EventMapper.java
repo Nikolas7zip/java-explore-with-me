@@ -9,6 +9,8 @@ import ru.practicum.ewm.user.dto.UserShortDto;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.practicum.ewm.event.EventState.*;
+
 public class EventMapper {
 
     public static Event mapToNewEvent(NewEventDto dto, User initiator, Category category) {
@@ -26,7 +28,7 @@ public class EventMapper {
         event.setPaid(dto.getPaid());
         event.setParticipantLimit(dto.getParticipantLimit());
         event.setRequestModeration(dto.getRequestModeration());
-        event.setState(EventState.PENDING);
+        event.setState(PENDING);
         event.setTitle(dto.getTitle());
 
         return event;
@@ -117,8 +119,8 @@ public class EventMapper {
         event.setParticipantLimit(dto.getParticipantLimit());
         event.setTitle(dto.getTitle());
 
-        if (event.getState() == EventState.CANCELED) {
-            event.setState(EventState.PENDING);
+        if (event.getState() == CANCELED) {
+            event.setState(PENDING);
         }
     }
 

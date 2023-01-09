@@ -6,6 +6,8 @@ import ru.practicum.ewm.participation.dto.ParticipationRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.practicum.ewm.participation.ParticipationStatus.*;
+
 public class ParticipationRequestMapper {
 
     public static ParticipationRequest mapToNewParticipationRequest(Event event, Long requesterId) {
@@ -13,9 +15,9 @@ public class ParticipationRequestMapper {
         participation.setEventId(event.getId());
         participation.setRequesterId(requesterId);
         if (event.getRequestModeration().equals(Boolean.TRUE)) {
-            participation.setStatus(ParticipationStatus.PENDING);
+            participation.setStatus(PENDING);
         } else {
-            participation.setStatus(ParticipationStatus.CONFIRMED);
+            participation.setStatus(CONFIRMED);
         }
 
         return participation;

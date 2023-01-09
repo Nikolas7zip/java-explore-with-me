@@ -6,9 +6,9 @@ import org.springframework.data.domain.Sort;
 
 public class EntityPagination {
 
-    private int from;
-    private int size;
-    private int page;
+    private final int from;
+    private final int size;
+    private final int page;
     private final Sort sort;
 
     public EntityPagination(int from, int size, Sort sort) {

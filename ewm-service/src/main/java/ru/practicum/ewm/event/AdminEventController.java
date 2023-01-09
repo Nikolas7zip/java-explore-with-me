@@ -39,6 +39,7 @@ public class AdminEventController {
     ) {
         EntityPagination pagination = new EntityPagination(from, size, Sort.by("id").ascending());
         GetEventsAdminRequest request = new GetEventsAdminRequest(users, states, categories, rangeStart, rangeEnd);
+
         return eventService.getAllByAdmin(pagination, request);
     }
 

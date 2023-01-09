@@ -12,15 +12,15 @@ import java.util.Set;
 public class GetStatsRequest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    private String app;
+    private final String app;
 
-    private LocalDateTime start;
+    private final LocalDateTime start;
 
-    private LocalDateTime end;
+    private final LocalDateTime end;
 
-    private Set<String> uris;
+    private final Set<String> uris;
 
-    private Boolean unique;
+    private final Boolean unique;
 
     public GetStatsRequest(String app, String start, String end, Set<String> uris, Boolean unique) {
         this.app = app;

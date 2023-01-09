@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
+        if (userRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException(User.class, id);
         }
         userRepository.deleteById(id);

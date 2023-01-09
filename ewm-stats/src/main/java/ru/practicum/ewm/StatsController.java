@@ -43,5 +43,4 @@ public class StatsController {
 
         return statsService.getViewStats(request);
     }
-
 }

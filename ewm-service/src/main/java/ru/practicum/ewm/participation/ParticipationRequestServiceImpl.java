@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.event.Event;
 import ru.practicum.ewm.event.EventRepository;
-import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.exception.BadRequestException;
 import ru.practicum.ewm.exception.EntityNotFoundException;
 import ru.practicum.ewm.participation.dto.ParticipationRequestDto;
 
 import java.util.List;
+
+import static ru.practicum.ewm.event.EventState.*;
+import static ru.practicum.ewm.participation.ParticipationStatus.*;
 
 @Slf4j
 @Service
@@ -53,7 +55,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         ParticipationRequest createdParticipation = participationRepository.save(participation);
         log.info("Created " + createdParticipation);
 
-        if (createdParticipation.getStatus() == ParticipationStatus.CONFIRMED) {
+        if (createdParticipation.getStatus() == CONFIRMED) {
             updateEventConfirmedRequests(event, 1);
         }
 
@@ -66,13 +68,13 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         ParticipationRequest participation = participationRepository.findById(requestId)
                 .orElseThrow(() -> new EntityNotFoundException(ParticipationRequest.class, requestId));
         ParticipationStatus prevStatus = participation.getStatus();
-        if (prevStatus == ParticipationStatus.REJECTED) {
+        if (prevStatus == REJECTED) {
             throw new BadRequestException("Can't cancel rejected participation request");
         }
         participation.setStatus(ParticipationStatus.CANCELED);
         ParticipationRequest updatedParticipation = participationRepository.save(participation);
         log.info("Cancel by requester " + updatedParticipation);
-        if (prevStatus == ParticipationStatus.CONFIRMED) {
+        if (prevStatus == CONFIRMED) {
             Event event = eventRepository.findEventById(participation.getEventId())
                     .orElseThrow(() -> new EntityNotFoundException(Event.class, participation.getEventId()));
             updateEventConfirmedRequests(event, -1);
@@ -99,7 +101,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new BadRequestException("Participation limit has been reached");
         }
 
-        participation.setStatus(ParticipationStatus.CONFIRMED);
+        participation.setStatus(CONFIRMED);
         ParticipationRequest updatedParticipation = participationRepository.save(participation);
         log.info("Confirm by initiator " + updatedParticipation);
         updateEventConfirmedRequests(event, 1);
@@ -123,7 +125,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         if (participation.getStatus() != ParticipationStatus.PENDING) {
             throw new BadRequestException("Only pending participation request can be rejected");
         }
-        participation.setStatus(ParticipationStatus.REJECTED);
+        participation.setStatus(REJECTED);
         ParticipationRequest updatedParticipation = participationRepository.save(participation);
         log.info("Rejected by initiator " + updatedParticipation);
 
@@ -131,7 +133,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     private void throwIfNotAllowedToParticipateInEvent(Event event, Long requesterId) {
-        if (event.getState() != EventState.PUBLISHED) {
+        if (event.getState() != PUBLISHED) {
             throw new BadRequestException("Not allowed to participate in unpublished event");
         } else if (event.getInitiator().getId().equals(requesterId)) {
             throw new BadRequestException("Initiator can't make participation request in his event");

@@ -16,6 +16,9 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.Set;
 
+import static ru.practicum.ewm.event.EventSort.*;
+
+
 @RestController
 @RequestMapping("/events")
 @Validated
@@ -57,14 +60,14 @@ public class PublicEventController {
         GetEventsPublicRequest getEventsRequest = new GetEventsPublicRequest(text, categories, paid,
                 rangeStart, rangeEnd, onlyAvailable);
         Sort eventOrder = Sort.unsorted();
-        if (sort == EventSort.VIEWS) {
+        if (sort == VIEWS) {
             eventOrder = Sort.by("views").descending();
-        } else if (sort == EventSort.EVENT_DATE) {
+        } else if (sort == EVENT_DATE) {
             eventOrder = Sort.by("eventDate").ascending();
         }
+
         EntityPagination pagination = new EntityPagination(from, size, eventOrder);
         List<EventShortDto> publishedEvents = eventService.getAllPublished(pagination, getEventsRequest);
-
         statsClient.saveEndpointHit(request.getRemoteAddr(), request.getRequestURI());
 
         return publishedEvents;

@@ -37,6 +37,7 @@ public class GetEventsPublicRequest {
         if (rangeEnd != null) {
             this.rangeEnd = LocalDateTime.parse(rangeEnd, FORMATTER);
         }
+
         this.onlyAvailable = onlyAvailable;
     }
 

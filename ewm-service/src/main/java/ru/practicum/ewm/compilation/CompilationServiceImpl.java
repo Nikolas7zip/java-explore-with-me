@@ -59,7 +59,7 @@ public class CompilationServiceImpl implements CompilationService {
         for (Compilation compilation : compilations) {
             List<Long> ids = compilation.getEvents().stream().map(Event::getId).collect(Collectors.toList());
             List<Event> events = new ArrayList<>();
-            if (!ids.isEmpty()) {
+            if (ids.size() > 0) {
                 events = eventRepository.findAllByEventIds(ids, Sort.unsorted());
             }
             dtos.add(CompilationMapper.mapToCompilationDto(compilation, events));
@@ -72,7 +72,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         List<Event> events = new ArrayList<>();
-        if (!newCompilationDto.getEvents().isEmpty()) {
+        if (newCompilationDto.getEvents().size() > 0) {
             events = eventRepository.findAllByEventIds(newCompilationDto.getEvents(), Sort.by("id").ascending());
         }
         if (events.size() != newCompilationDto.getEvents().size()) {

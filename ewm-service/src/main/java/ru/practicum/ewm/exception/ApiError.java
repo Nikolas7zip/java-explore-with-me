@@ -32,6 +32,4 @@ public class ApiError {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.timestamp = LocalDateTime.now().format(formatter);
     }
-
-
 }

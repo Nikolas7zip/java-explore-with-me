@@ -24,6 +24,6 @@ public class View {
     @Column(name = "request_date", nullable = false)
     private LocalDateTime timestamp;
 
-    @Column(name = "uri", nullable = false)
+    @Column(name = "uri", length = 512, nullable = false)
     private String uri;
 }

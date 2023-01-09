@@ -56,11 +56,9 @@ public class PrivateEventController {
         return eventService.getByInitiator(userId, eventId);
     }
 
-
     @PatchMapping("/{userId}/events/{eventId}")
     public EventFullDto cancelEventByInitiator(@PathVariable Long userId,
                                                @PathVariable Long eventId) {
         return eventService.cancelByInitiator(userId, eventId);
     }
-
 }

@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.ewm.event.EventState.*;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +30,6 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-
 
     @Autowired
     public EventServiceImpl(EventRepository eventRepository,
@@ -39,12 +40,11 @@ public class EventServiceImpl implements EventService {
         this.userRepository = userRepository;
     }
 
-
     @Override
     public EventFullDto getPublished(Long id) {
         Event event = eventRepository.findEventById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Event.class, id));
-        if (event.getState() != EventState.PUBLISHED) {
+        if (event.getState() != PUBLISHED) {
             throw new BadRequestException("Event with id=" + id + " is not published");
         }
 
@@ -56,12 +56,13 @@ public class EventServiceImpl implements EventService {
         QEvent event = QEvent.event;
         List<BooleanExpression> conditions = new ArrayList<>();
 
-        conditions.add(event.state.eq(EventState.PUBLISHED));
+        conditions.add(event.state.eq(PUBLISHED));
         if (request.getText() != null) {
             String searchText = request.getText();
             conditions.add(event.annotation.containsIgnoreCase(searchText)
                     .or(event.description.containsIgnoreCase(searchText)));
         }
+
         if (request.getCategories() != null) {
             conditions.add(event.category.id.in(request.getCategories()));
         }
@@ -81,6 +82,7 @@ public class EventServiceImpl implements EventService {
         if (request.getPaid() != null) {
             conditions.add(event.paid.eq(request.getPaid()));
         }
+
         if (request.getOnlyAvailable().equals(Boolean.TRUE)) {
             conditions.add(event.participantLimit.gt(0L));
             conditions.add(event.confirmedRequests.eq(event.participantLimit));
@@ -88,13 +90,12 @@ public class EventServiceImpl implements EventService {
 
         BooleanExpression finalCondition = conditions.stream()
                 .reduce(BooleanExpression::and)
-                .get();
+                .orElseThrow(() -> new RuntimeException("Error query boolean expression"));
 
         List<Event> events = findEventsByFinalCondition(finalCondition, pagination);
 
         return EventMapper.mapToShortEventDto(events);
     }
-
 
     @Transactional
     @Override
@@ -118,7 +119,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getAllByInitiator(Long userId, EntityPagination pagination) {
-        List<Event> events =  eventRepository.findAllByInitiatorId(userId, pagination.getPageable());
+        List<Event> events = eventRepository.findAllByInitiatorId(userId, pagination.getPageable());
 
         return EventMapper.mapToShortEventDto(events);
     }
@@ -149,19 +150,18 @@ public class EventServiceImpl implements EventService {
 
         BooleanExpression finalCondition = conditions.stream()
                 .reduce(BooleanExpression::and)
-                .get();
+                .orElseThrow(() -> new RuntimeException("Error query boolean expression"));
 
         List<Event> events = findEventsByFinalCondition(finalCondition, pagination);
 
         return EventMapper.mapToFullEventDto(events);
     }
 
-
     @Transactional
     @Override
     public EventFullDto updateByInitiator(Long userId, UserUpdateEventDto updateEventDto) {
         Event event = findEventByInitiator(userId, updateEventDto.getEventId());
-        if (event.getState() != EventState.PENDING && event.getState() != EventState.CANCELED) {
+        if (event.getState() != PENDING && event.getState() != CANCELED) {
             throw new BadRequestException("Only pending or canceled events can be changed");
         }
         Category newCategory = categoryRepository.findById(updateEventDto.getCategory())
@@ -195,10 +195,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto cancelByInitiator(Long userId, Long eventId) {
         Event event = findEventByInitiator(userId, eventId);
-        if (event.getState() != EventState.PENDING) {
+        if (event.getState() != PENDING) {
             throw new BadRequestException("Only pending events can be canceled");
         }
-        event.setState(EventState.CANCELED);
+        event.setState(CANCELED);
         Event updatedEvent = eventRepository.save(event);
         log.info("Canceled by initiator " + updatedEvent);
 
@@ -212,10 +212,10 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new EntityNotFoundException(Event.class, eventId));
         LocalDateTime nowMoment = LocalDateTime.now().withNano(0);
         LocalDateTime limitOnDate = nowMoment.plusHours(EventDateValidator.MIN_HOUR_DELAY_START_EVENT_FROM_PUBLISHED);
-        if (event.getState() != EventState.PENDING || event.getEventDate().isBefore(limitOnDate)) {
+        if (event.getState() != PENDING || event.getEventDate().isBefore(limitOnDate)) {
             throw new BadRequestException("Do not meet conditions for publish event");
         }
-        event.setState(EventState.PUBLISHED);
+        event.setState(PUBLISHED);
         event.setPublishedOn(nowMoment);
         Event updatedEvent = eventRepository.save(event);
         log.info("Published by admin " + updatedEvent);
@@ -229,12 +229,12 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findEventById(eventId)
                 .orElseThrow(() -> new EntityNotFoundException(Event.class, eventId));
 
-        if (event.getState() == EventState.PUBLISHED) {
+        if (event.getState() == PUBLISHED) {
             throw new BadRequestException("Can't cancel published event");
         }
 
-        if (event.getState() == EventState.PENDING) {
-            event.setState(EventState.CANCELED);
+        if (event.getState() == PENDING) {
+            event.setState(CANCELED);
             eventRepository.save(event);
         }
         log.info("Canceled by admin  " + event);
@@ -261,7 +261,7 @@ public class EventServiceImpl implements EventService {
     private List<Event> findEventsByFinalCondition(BooleanExpression finalCondition, EntityPagination pagination) {
         List<Event> eventsShort = eventRepository.findAll(finalCondition, pagination.getPageable()).getContent();
         List<Event> eventsFull = new ArrayList<>();
-        if (!eventsShort.isEmpty()) {
+        if (eventsShort.size() > 0) {
             List<Long> eventIds = eventsShort.stream().map(Event::getId).collect(Collectors.toList());
             eventsFull = eventRepository.findAllByEventIds(eventIds, pagination.getSort());
         }

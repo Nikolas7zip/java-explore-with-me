@@ -15,7 +15,6 @@ public interface ParticipationRequestRepository extends JpaRepository<Participat
 
     List<ParticipationRequest> findAllByEventId(Long eventId, Sort sort);
 
-
     @Modifying
     @Query("UPDATE ParticipationRequest part " +
             "SET part.status = ru.practicum.ewm.participation.ParticipationStatus.REJECTED " +

@@ -56,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
-        if (!categoryRepository.existsById(categoryDto.getId())) {
+        if (categoryRepository.findById(categoryDto.getId()).isEmpty()) {
             throw new EntityNotFoundException(Category.class, categoryDto.getId());
         }
         Category updatedCategory = categoryRepository.save(CategoryMapper.mapToCategory(categoryDto));
@@ -75,5 +75,4 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
         log.info("Deleted category with id=" + id);
     }
-
 }
