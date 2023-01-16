@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.pagination.EntityPagination;
 import ru.practicum.ewm.user.dto.UserDto;
+import ru.practicum.ewm.user.dto.UserProhibitionDto;
+import ru.practicum.ewm.user.prohibition.dto.NewProhibitionDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -45,4 +47,21 @@ public class AdminUserController {
     public void deleteUser(@PathVariable Long userId) {
         userService.delete(userId);
     }
+
+    @PutMapping("/{userId}/block")
+    public UserProhibitionDto blockUser(@PathVariable Long userId,
+                                        @RequestBody NewProhibitionDto newProhibitionDto) {
+        return userService.block(userId, newProhibitionDto);
+    }
+
+    @DeleteMapping("/{userId}/unlock")
+    public void unlockUser(@PathVariable Long userId) {
+        userService.unlock(userId);
+    }
+
+    @GetMapping("/{userId}")
+    public UserProhibitionDto getUser(@PathVariable Long userId) {
+        return userService.get(userId);
+    }
+
 }

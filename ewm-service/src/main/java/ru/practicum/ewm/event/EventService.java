@@ -1,5 +1,7 @@
 package ru.practicum.ewm.event;
 
+import ru.practicum.ewm.event.comment.dto.CommentDto;
+import ru.practicum.ewm.event.comment.dto.NewCommentDto;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.pagination.EntityPagination;
 
@@ -30,4 +32,12 @@ public interface EventService {
     EventFullDto updateByAdmin(Long eventId, AdminUpdateEventDto updateEventDto);
 
     void incrementViews(Long eventId);
+
+    CommentDto addServiceCommentByAdmin(Long eventId, NewCommentDto newCommentDto);
+
+    CommentDto addServiceCommentByInitiator(Long userId, Long eventId, NewCommentDto newCommentDto);
+
+    List<CommentDto> getServiceComments(Long eventId);
+
+    void deleteServiceComment(Long eventId, Long commentId);
 }
