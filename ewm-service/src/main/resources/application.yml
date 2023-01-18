@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+ewm:
+  main-app: ewm-main-service
+  stats-server: ${EWM_STATS_SERVER_URL}
+
+spring:
+  sql:
+    init:
+      mode: always
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+#        show_sql: true
+        format_sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
