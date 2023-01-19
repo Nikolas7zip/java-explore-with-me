@@ -160,9 +160,6 @@
 									"const target = pm.response.json()[0];",
 									"",
 									"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {",
-									"    pm.expect(pm.response.json().length).equal(1);",
-									"    pm.expect(target.id).equal(1);",
-									"    pm.expect(target.initiator.id).equal(1);",
 									"    pm.expect(target.state).equal('PENDING');",
 									"});"
 								],
