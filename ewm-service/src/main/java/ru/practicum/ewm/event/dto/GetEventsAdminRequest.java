@@ -7,6 +7,7 @@ import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.validation.EventDateValidator;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -33,5 +34,10 @@ public class GetEventsAdminRequest {
         if (rangeEnd != null) {
             this.rangeEnd = LocalDateTime.parse(rangeEnd, EventDateValidator.FORMATTER);
         }
+    }
+
+    public GetEventsAdminRequest(EventState state) {
+        this.states = new HashSet<>();
+        this.states.add(state);
     }
 }

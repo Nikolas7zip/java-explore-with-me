@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.event.comment.dto.CommentDto;
+import ru.practicum.ewm.event.comment.dto.NewCommentDto;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.event.dto.NewEventDto;
@@ -60,5 +62,12 @@ public class PrivateEventController {
     public EventFullDto cancelEventByInitiator(@PathVariable Long userId,
                                                @PathVariable Long eventId) {
         return eventService.cancelByInitiator(userId, eventId);
+    }
+
+    @PostMapping("/{userId}/events/{eventId}/comments")
+    public CommentDto addServiceComment(@PathVariable Long userId,
+                                        @PathVariable Long eventId,
+                                        @Valid @RequestBody NewCommentDto newCommentDto) {
+        return eventService.addServiceCommentByInitiator(userId, eventId, newCommentDto);
     }
 }
